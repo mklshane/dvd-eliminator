@@ -6,7 +6,8 @@ const App = () => {
   // Refs
   const gameContainerRef = useRef(null);
   const animationRef = useRef();
-  const lastBounceSoundTime = useRef(0); // Debounce timer for bounce sound
+  const lastBounceSoundTime = useRef(0); 
+  const audioRefs = useRef({ start: null, winner: null, bounce: null });
 
   // State variables
   const [names, setNames] = useState([]);
@@ -21,10 +22,6 @@ const App = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [width, height] = useWindowSize();
 
-  // Audio instances - properly initialized and cleaned up
-  const audioRefs = useRef({ start: null, winner: null, bounce: null });
-
-  // Initialize audio only once and clean up properly
   useEffect(() => {
     // Create audio instances only once
     audioRefs.current.start = new Audio("/sounds/start.mp3");
@@ -34,9 +31,8 @@ const App = () => {
     // Set volume
     audioRefs.current.start.volume = 0.5;
     audioRefs.current.winner.volume = 0.5;
-    audioRefs.current.bounce.volume = 0.1; // Lower volume for frequent bounces
+    audioRefs.current.bounce.volume = 0.1; 
 
-    // Handle browser autoplay policy
     const handleUserInteraction = () => {
       if (audioRefs.current.start) audioRefs.current.start.load();
       if (audioRefs.current.winner) audioRefs.current.winner.load();
@@ -46,7 +42,6 @@ const App = () => {
 
     window.addEventListener("click", handleUserInteraction);
 
-    // Cleanup function
     return () => {
       window.removeEventListener("click", handleUserInteraction);
 
@@ -60,14 +55,12 @@ const App = () => {
         }
       });
     };
-  }, []); // Empty dependency array ensures this runs only once
+  }, []); 
 
-  // Helper function to play audio safely
   const playAudio = useCallback((audioType) => {
     const audio = audioRefs.current[audioType];
     if (audio) {
       if (audioType === "bounce") {
-        // Debounce bounce sound (200ms cooldown)
         if (Date.now() - lastBounceSoundTime.current < 200) return;
         lastBounceSoundTime.current = Date.now();
       }
@@ -76,7 +69,6 @@ const App = () => {
     }
   }, []);
 
-  // Constants
   const logoSize = { width: 80, height: 40 };
   const colors = [
     "#FF0080", // Hot Pink
@@ -87,7 +79,6 @@ const App = () => {
     "#00FF80", // Spring Green
   ];
 
-  // CSS styles with retro theme
   const styles = {
     container: {
       display: "flex",
@@ -135,7 +126,7 @@ const App = () => {
         radial-gradient(ellipse at center, transparent 40%, rgba(0, 20, 40, 0.3) 100%)
       `,
       pointerEvents: "none",
-      zIndex: 999,
+      zIndex: 0,
     },
     app: {
       display: "flex",
@@ -211,8 +202,8 @@ const App = () => {
     },
     gameContainer: {
       position: "relative",
-      width: "min(90vw, 900px)",
-      height: "60vh",
+      width: "min(90vw, 960px)",
+      height: "75vh",
       minHeight: "420px",
       margin: "20px auto",
       overflow: "hidden",
@@ -235,13 +226,16 @@ const App = () => {
       alignItems: "center",
       justifyContent: "center",
       fontWeight: "bold",
-      color: "#000",
       fontSize: "20px",
-      border: "2px solid #0f0",
+      color: "black",
       borderRadius: "8px",
       transition: "background 0.2s",
       zIndex: 10,
-      letterSpacing: "2px",
+      letterSpacing: "1px",
+      backgroundSize: "contain",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      border: "3px solid rgba(0, 255, 136, 0.5)",
     },
     name: {
       position: "absolute",
@@ -673,7 +667,7 @@ const App = () => {
       <div style={styles.crtOverlay}></div>
 
       <div style={styles.app}>
-        <h1 style={styles.header}>DVD ELIMINATOR 3000</h1>
+        <h1 style={styles.header}>DVD ELIMINATOR</h1>
         <div style={styles.subtitle}>LAST MAN STANDING</div>
 
         <div style={styles.inputArea}>
@@ -701,7 +695,7 @@ const App = () => {
                 Object.assign(e.target.style, styles.button);
               }}
             >
-              {gameStarted ? "⚡ SYSTEM ACTIVE" : "🚀 START"}
+              {gameStarted ? " SYSTEM ACTIVE" : " START"}
             </button>
             <button
               onClick={resetGame}
@@ -720,14 +714,14 @@ const App = () => {
                 e.target.style.boxShadow = "0 0 10px rgba(255, 0, 128, 0.3)";
               }}
             >
-              🔄 SYSTEM RESET
+              SYSTEM RESET
             </button>
           </div>
         </div>
 
         {winner && (
           <div style={styles.winnerDisplay}>
-            <div
+            {/* <div
               style={{
                 fontSize: "0.9rem",
                 marginBottom: "0.5rem",
@@ -735,7 +729,7 @@ const App = () => {
               }}
             >
               WINNER
-            </div>
+            </div>  */}
             <div style={{ color: "#ff0080", fontWeight: "900" }}>
               {winner.toUpperCase()}
             </div>
@@ -764,7 +758,7 @@ const App = () => {
                 background: colors[currentColorIndex],
               }}
             >
-              DVD
+             DVD
             </div>
           )}
 
@@ -818,7 +812,7 @@ const App = () => {
               }`;
             }}
           >
-            {isPaused ? "▶️ RESUME" : "⏸️ PAUSE"}
+            {isPaused ? "▶ RESUME" : "⏸PAUSE"}
           </button>
         </div>
       </div>
@@ -832,7 +826,7 @@ const App = () => {
         }}
       >
         {" "}
-        by MSE
+        ⋆˚࿔ shine ⋆˚࿔
       </h4>
     </div>
   );
