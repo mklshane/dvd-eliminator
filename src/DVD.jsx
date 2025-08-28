@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Confetti from "react-confetti";
 import { useAudio } from "./hooks/useAudio";
 import { useGameLogic } from "./hooks/useGameLogic";
-import CRTEffects from "./components/CTREffects";
+import CRTEffects from "./components/CRTEffects";
 import GameContainer from "./components/GameContainer";
 import DVDLogo from "./components/DVDLogo";
 import NameElement from "./components/NameElement";
@@ -95,10 +95,14 @@ const App = () => {
   return (
     <div
       className="flex flex-col items-center p-0 min-h-screen
-      radial-gradient(circle at 25% 25%, #1a0033 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, #001a33 0%, transparent 50%),
-      linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%)
       font-orbitron text-green-400 m-0 overflow-hidden relative"
+      style={{
+        background: `
+          radial-gradient(circle at 25% 25%, #1a0033 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, #001a33 0%, transparent 50%),
+          linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%)
+        `,
+      }}
     >
       {showConfetti && (
         <Confetti
@@ -135,6 +139,15 @@ const App = () => {
 
         {winner && <WinnerDisplay winner={winner} />}
 
+        {!winner && gameStarted && (
+          <div
+            className="text-xl text-green-400 text-shadow-[0_0_10px_#00ff88] font-bold
+            bg-green-400/10 px-4 py-2 rounded-full border border-green-400 backdrop-blur-sm my-4"
+          >
+            NAMES REMAINING: {remainingCount}
+          </div>
+        )}
+
         <GameContainer innerRef={gameContainerRef}>
           {gameStarted && (
             <DVDLogo
@@ -148,12 +161,25 @@ const App = () => {
           ))}
         </GameContainer>
 
-        <ControlButtons
-          isPaused={isPaused}
-          gameStarted={gameStarted}
-          togglePause={togglePause}
-          remainingCount={remainingCount}
-        />
+        <div className="mt-8">
+          <button
+            onClick={togglePause}
+            className={`px-6 py-3 w-36 text-xs rounded-lg border-2
+              ${
+                isPaused
+                  ? "bg-green-400/20 border-green-400 text-green-400"
+                  : "bg-orange-400/20 border-orange-400 text-orange-400"
+              }
+              ${
+                gameStarted ? "opacity-100" : "opacity-40"
+              } cursor-pointer transition-all font-orbitron font-semibold
+              uppercase tracking-wider shadow-[0_0_10px_currentColor] backdrop-blur-sm
+              hover:-translate-y-0.5 hover:shadow-[0_0_20px_currentColor]`}
+            disabled={!gameStarted}
+          >
+            {isPaused ? "▶ RESUME" : "⏸PAUSE"}
+          </button>
+        </div>
       </div>
 
       <h4 className="text-sm text-gray-400 -mt-6 mb-8 tracking-widest">
