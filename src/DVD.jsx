@@ -3,10 +3,9 @@ import Confetti from "react-confetti";
 import { useWindowSize } from "@react-hook/window-size";
 
 const App = () => {
-  // Refs
   const gameContainerRef = useRef(null);
   const animationRef = useRef();
-  const lastBounceSoundTime = useRef(0); 
+  const lastBounceSoundTime = useRef(0);
   const audioRefs = useRef({ start: null, winner: null, bounce: null });
 
   // State variables
@@ -17,7 +16,7 @@ const App = () => {
   const [winner, setWinner] = useState(null);
   const [inputText, setInputText] = useState("");
   const [position, setPosition] = useState({ x: 100, y: 100 });
-  const [velocity, setVelocity] = useState({ dx: 1.8, dy: 1.8 });
+  const [velocity, setVelocity] = useState({ dx: 10, dy: 10 });
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
   const [width, height] = useWindowSize();
@@ -31,7 +30,7 @@ const App = () => {
     // Set volume
     audioRefs.current.start.volume = 0.5;
     audioRefs.current.winner.volume = 0.5;
-    audioRefs.current.bounce.volume = 0.1; 
+    audioRefs.current.bounce.volume = 0.1;
 
     const handleUserInteraction = () => {
       if (audioRefs.current.start) audioRefs.current.start.load();
@@ -55,7 +54,7 @@ const App = () => {
         }
       });
     };
-  }, []); 
+  }, []);
 
   const playAudio = useCallback((audioType) => {
     const audio = audioRefs.current[audioType];
@@ -71,12 +70,12 @@ const App = () => {
 
   const logoSize = { width: 80, height: 40 };
   const colors = [
-    "#FF0080", // Hot Pink
-    "#00FFFF", // Cyan
-    "#FFFF00", // Yellow
-    "#FF4000", // Orange Red
-    "#8000FF", // Purple
-    "#00FF80", // Spring Green
+    "#FF0080",
+    "#00FFFF",
+    "#FFFF00",
+    "#FF4000",
+    "#8000FF",
+    "#00FF80",
   ];
 
   const styles = {
@@ -239,15 +238,15 @@ const App = () => {
     },
     name: {
       position: "absolute",
-      fontSize: "14px",
+      fontSize: "16px",
       fontWeight: "600",
-      padding: "6px 12px",
+      padding: "2px 4px",
       background: "rgba(0, 0, 0, 0.8)",
       borderRadius: "6px",
       borderWidth: "1px",
       borderStyle: "solid",
       borderColor: "transparent",
-      textShadow: "0 0 8px currentColor",
+      textShadow: "0 0 2px currentColor",
       transition: "opacity 0.1s ease",
       zIndex: 5,
       fontFamily: "'Orbitron', monospace",
@@ -411,7 +410,7 @@ const App = () => {
         const tempDiv = document.createElement("div");
         tempDiv.style.fontSize = "14px";
         tempDiv.style.fontWeight = "600";
-        tempDiv.style.padding = "6px 12px";
+        tempDiv.style.padding = "6px 0";
         tempDiv.style.position = "absolute";
         tempDiv.style.visibility = "hidden";
         tempDiv.textContent = name;
@@ -602,8 +601,8 @@ const App = () => {
             (gameContainerRef.current.clientHeight - logoSize.height),
         });
         setVelocity({
-          dx: (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 1.5),
-          dy: (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 1.5),
+          dx: (Math.random() > 0.5 ? 1 : -1) * (6 + Math.random() * 1.5),
+          dy: (Math.random() > 0.5 ? 1 : -1) * (6    + Math.random() * 1.5),
         });
 
         setGameStarted(true);
@@ -649,9 +648,9 @@ const App = () => {
 
   const remainingCount = nameElements.filter((item) => !item.eliminated).length;
 
+
   return (
     <div style={styles.container}>
-      {/* Render Confetti when showConfetti is true */}
       {showConfetti && (
         <Confetti
           width={width}
@@ -758,7 +757,7 @@ const App = () => {
                 background: colors[currentColorIndex],
               }}
             >
-             DVD
+              DVD
             </div>
           )}
 
