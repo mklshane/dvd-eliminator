@@ -137,7 +137,13 @@ const App = () => {
           resetGame={resetGame}
         />
 
-        {winner && <WinnerDisplay winner={winner} />}
+        {winner && (
+          <WinnerDisplay
+            winner={winner}
+            inputText={inputText}
+            setInputText={setInputText}
+          />
+        )}
 
         {!winner && gameStarted && (
           <div
