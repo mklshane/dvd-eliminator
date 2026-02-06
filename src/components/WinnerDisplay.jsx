@@ -3,7 +3,7 @@ import RemovalModal from "./RemovalModal";
 
 const WinnerDisplay = ({ winner, onRemoveName, inputText, setInputText }) => {
   const [showModal, setShowModal] = useState(true);
-
+/* try */
   const handleRemove = () => {
     if (onRemoveName) {
       onRemoveName(winner);
